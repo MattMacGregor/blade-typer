@@ -1,0 +1,62 @@
+@import '../node_modules/bootstrap/scss/bootstrap';
+@import '../node_modules/bootswatch/dist/vapor/_bootswatch.scss';
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+textarea {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace !important;
+  background-color: #000000;
+  color: rgb(51, 255, 0);
+  resize: none !important;
+  outline: solid;
+  outline-width: thick;
+  animation: outline-color 1s infinite;
+}
+
+@keyframes outline-color {
+    0% {
+        outline-color: $danger;
+    }
+    50% {
+        outline-color: darken($danger, 25%);
+
+    }
+    100% {
+        outline-color: $danger;
+    }
+}
+
+textarea:focus {
+    outline-color: rgb(51, 255, 0) !important;
+    outline: double;
+    outline-width: thick;
+}
+
+#title {
+    font-family: BladeRunner;
+    color: red;
+    @include font-size(9rem);
+}
+
+#titleNav {
+    font-family: BladeRunner;
+    color: red;
+    @include font-size(2em);
+}
+
+@font-face {
+    font-family: BladeRunner;
+    src: url(../public/blade_runner.ttf);
+}

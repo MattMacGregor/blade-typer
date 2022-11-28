@@ -1,24 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import {BrowserRouter} from "react-router-dom";
+import {Routes, Route} from "react-router";
+import Home from "./home";
+import Typer from "./typer";
+import { configureStore } from '@reduxjs/toolkit';
+import {Provider} from "react-redux";
+import toTypeReducer from "./reducers/toTypeReducer";
+import {useEffect} from "react";
+
+const store = configureStore( {
+    reducer: {
+        toType: toTypeReducer,
+    }
+});
 
 function App() {
+  useEffect(() => {
+      document.body.id = "crt"
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <div className="scanline"></div>
+      <BrowserRouter>
+            <Routes>
+                <Route index path="/*" element={<Home/>} />
+                <Route path="/typer" element={<Typer/>} />
+            </Routes>
+      </BrowserRouter>
+    </Provider>
   );
 }
 
