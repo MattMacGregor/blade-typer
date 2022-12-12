@@ -1,6 +1,8 @@
-@import '../node_modules/bootstrap/scss/bootstrap';
-@import '../node_modules/bootswatch/dist/vapor/_bootswatch.scss';
+@import '~bootswatch/dist/vapor/_variables.scss';
+@import '~bootstrap/scss/bootstrap';
+@import '~bootswatch/dist/vapor/_bootswatch.scss';
 body {
+  background-image: none !important;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -14,18 +16,29 @@ code {
     monospace;
 }
 
-textarea {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace !important;
-  background-color: #000000;
-  color: rgb(51, 255, 0);
-  resize: none !important;
-  outline: solid;
-  outline-width: thick;
-  animation: outline-color 1s infinite;
+#homeBar {
+    outline-width: 4px;
+    outline-color: $black;
+    outline-style: double;
+    background: linear-gradient(darken($dark, 3%) 5%, darken($dark, 0%), darken($dark, 4%) 85%);
 }
 
-@keyframes outline-color {
+.homeBarLink {
+    color: white;
+}
+
+#typerBox {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+  background-color: #000000;
+  color: rgb(51, 255, 0);
+  resize: none;
+  outline: solid;
+  outline-width: thick;
+  animation: outlineColor 1s infinite;
+}
+
+@keyframes outlineColor {
     0% {
         outline-color: $danger;
     }
@@ -38,25 +51,32 @@ textarea {
     }
 }
 
-textarea:focus {
-    outline-color: rgb(51, 255, 0) !important;
+#typerBox:focus {
+    outline-color: rgb(51, 255, 0);
     outline: double;
     outline-width: thick;
+    animation: none;
 }
 
 #title {
     font-family: BladeRunner;
     color: red;
-    @include font-size(9rem);
+    @include font-size(7rem);
 }
 
 #titleNav {
     font-family: BladeRunner;
     color: red;
-    @include font-size(2em);
+    @include font-size(2.2em);
 }
 
 @font-face {
     font-family: BladeRunner;
     src: url(../public/blade_runner.ttf);
+}
+
+.uiAlert {
+    position: absolute;
+    top: 4vh;
+    width: 100%;
 }

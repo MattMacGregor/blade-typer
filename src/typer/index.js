@@ -17,9 +17,10 @@ const Typer = () => {
     const hasStarted = useRef(false)
     const typingArea = useRef();
     const updateProgress = () => {
-        let correct = 0, incorrect = 0, total = totalKeyPresses + 1, correctWords = 0;
-        let wordCorrect = true;
         if(!loading && toType) {
+            let correct = 0, incorrect = 0, total = totalKeyPresses + 1, correctWords = 0;
+            let wordCorrect = true;
+            let previousCorrect = 0, previousWords = 0;
             setProgress([...(toType[currentGoalIndex].summary)].map((c, i) => {
                     
                     if(i >= typed.length) {
@@ -43,12 +44,16 @@ const Typer = () => {
             if(correct == toType[currentGoalIndex].summary.length) {
                 if(currentGoalIndex < toType.length - 1) {
                     dispatch(nextGoal())
+                    previousCorrect += correct;
+                    previousWords += correctWords + 1;
                 } else {
                     clearIntervalIfSet();
                 }
             }
+            correct += previousCorrect;
+            correctWords += previousWords;
+            dispatch(updateStats({ total, correct, incorrect, correctWords }))
         }
-        dispatch(updateStats({ total, correct, incorrect, correctWords }))
     }
 
     useEffect(() => {
@@ -108,7 +113,7 @@ const Typer = () => {
             {!loading && toType && <h5 className="text-secondary text-center text-warning">{currentGoalIndex + 1}/{toType.length}</h5>}
             <Container className="text-center align-items-center">
                 <h3 className="align-middle mb-5">{ loading && "Loading..."}{ progress } </h3>
-                <textarea ref={typingArea} rows="5" disabled={!started} className="w-100 mt-5 mb-5" autoFocus onDrop={ (e) => { e.preventDefault() }} onPaste={ (e) => { e.preventDefault() }} onChange={ (e) => { setTyped(e.target.value) }} />
+                <textarea id="typerBox" ref={typingArea} rows="5" disabled={!started} className="w-100 mt-5 mb-5" autoFocus onDrop={ (e) => e.target.value} onPaste={ (e) => { e.preventDefault() }} onChange={ (e) => { setTyped(e.target.value) }} />
             </Container>
             <TypeStats/>
         </Container>

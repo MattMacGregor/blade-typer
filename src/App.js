@@ -1,34 +1,32 @@
-import {BrowserRouter} from "react-router-dom";
-import {Routes, Route} from "react-router";
-import Home from "./home";
-import Typer from "./typer";
 import { configureStore } from '@reduxjs/toolkit';
 import {Provider} from "react-redux";
-import toTypeReducer from "./reducers/toTypeReducer";
 import {useEffect} from "react";
+import {Container} from "react-bootstrap";
+import toTypeReducer from "./reducers/toTypeReducer";
+import userReducer from "./reducers/user-reducer";
+import uiReducer from "./reducers/ui-reducer"
+import AppIndex from "./AppIndex.js"
 
 const store = configureStore( {
     reducer: {
         toType: toTypeReducer,
+        users: userReducer,
+        ui: uiReducer, 
     }
 });
 
 function App() {
   useEffect(() => {
-      document.body.id = "crt"
+      document.body.classList.add("crt");
   }, [])
-
-  return (
-    <Provider store={store}>
-      <div className="scanline"></div>
-      <BrowserRouter>
-            <Routes>
-                <Route index path="/*" element={<Home/>} />
-                <Route path="/typer" element={<Typer/>} />
-            </Routes>
-      </BrowserRouter>
-    </Provider>
-  );
+    return (
+        <Provider store={store}>
+            <div className="scanline"></div>
+            <Container>
+                <AppIndex/>
+            </Container>
+        </Provider>
+    );
 }
 
 export default App;
