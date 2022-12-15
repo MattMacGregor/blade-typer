@@ -1,7 +1,8 @@
 import React, { useEffect, useState, Text, useRef } from "react";
 import { Button, Container } from 'react-bootstrap';
 import {useSelector, useDispatch} from "react-redux";
-import {nextGoal, updateTyped, updateStats, incrementTime, tickStartCountdownDown} from "../reducers/toTypeReducer";
+import {nextGoal, updateTyped, updateStats, incrementTime, tickStartCountdownDown, reset, finish} from "../reducers/toTypeReducer";
+import { saveReplayThunk } from "../login/users-thunk"
 import { useNavigate } from "react-router-dom";
 import TypeStats from "./typeStats";
 import {type} from "../helpers/animations"; 
@@ -9,20 +10,21 @@ const Typer = () => {
     const [typed, setTyped] = useState("");
     const [progress, setProgress] = useState();
     const [title, setToTypeTitle] = useState("");
-    const {toType, currentGoalIndex, loading, totalKeyPresses, wordsCorrect, totalCorrect, totalIncorrect, time, startCountdown, started} = useSelector( state => state.toType );
+    const {toType, currentGoalIndex, loading, totalKeyPresses, wordsCorrect, totalCorrect, totalIncorrect, time, startCountdown, started, finished, gamemode, typingId} = useSelector( state => state.toType )
+    const {currentUser} = useSelector( state => state.users)
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const interval = useRef(undefined)
+    const previousCorrect = useRef(0);
+    const previousWords = useRef(0);
     const hasStarted = useRef(false)
     const typingArea = useRef();
     const updateProgress = () => {
         if(!loading && toType) {
             let correct = 0, incorrect = 0, total = totalKeyPresses + 1, correctWords = 0;
             let wordCorrect = true;
-            let previousCorrect = 0, previousWords = 0;
-            setProgress([...(toType[currentGoalIndex].summary)].map((c, i) => {
-                    
+            setProgress([...(toType[currentGoalIndex].summary)].map((c, i) => { 
                     if(i >= typed.length) {
                         return c
                     } else if(c == typed[i]) {
@@ -44,20 +46,23 @@ const Typer = () => {
             if(correct == toType[currentGoalIndex].summary.length) {
                 if(currentGoalIndex < toType.length - 1) {
                     dispatch(nextGoal())
-                    previousCorrect += correct;
-                    previousWords += correctWords + 1;
+                    previousCorrect.current += correct
+                    previousWords.current += correctWords + 1
                 } else {
-                    clearIntervalIfSet();
+                    dispatch(finish())
+                    clearIntervalIfSet()
                 }
             }
-            correct += previousCorrect;
-            correctWords += previousWords;
+            correct += previousCorrect.current
+            correctWords += previousWords.current
             dispatch(updateStats({ total, correct, incorrect, correctWords }))
         }
     }
 
     useEffect(() => {
-        typingArea.current.value = '';
+        if(typingArea.current) {
+            typingArea.current.value = '';
+        }
         setTyped('');
         if(!loading && toType) {
             setToTypeTitle(toType[currentGoalIndex].title); 
@@ -68,6 +73,8 @@ const Typer = () => {
         if(!loading && !toType) { 
             navigate("/")
         }
+        dispatch(reset());
+        clearIntervalIfSet()
     }, [])
 
     const clearIntervalIfSet = () => {
@@ -88,6 +95,8 @@ const Typer = () => {
                     }, 1000)
                 }
             }
+            
+            return clearIntervalIfSet 
         })()
 
         return clearIntervalIfSet 
@@ -101,7 +110,6 @@ const Typer = () => {
                 dispatch(incrementTime())
             }, 10)
         }
-        
         return clearIntervalIfSet 
     }, [started]);
 
@@ -113,7 +121,24 @@ const Typer = () => {
             {!loading && toType && <h5 className="text-secondary text-center text-warning">{currentGoalIndex + 1}/{toType.length}</h5>}
             <Container className="text-center align-items-center">
                 <h3 className="align-middle mb-5">{ loading && "Loading..."}{ progress } </h3>
-                <textarea id="typerBox" ref={typingArea} rows="5" disabled={!started} className="w-100 mt-5 mb-5" autoFocus onDrop={ (e) => e.target.value} onPaste={ (e) => { e.preventDefault() }} onChange={ (e) => { setTyped(e.target.value) }} />
+                {
+                    !finished &&
+                    <textarea id="typerBox" ref={typingArea} rows="5" disabled={!started} className="w-100 mt-5 mb-5" autoFocus onDrop={ (e) => e.target.value} onPaste={ (e) => { e.preventDefault() }} onChange={ (e) => { setTyped(e.target.value) }} />
+                }
+                {
+                    currentUser && finished &&
+                    <Button className="w-100" onClick={() => {dispatch(saveReplayThunk(
+                        {
+                            gamemode: gamemode,
+                            username: currentUser.username,
+                            typingId: typingId,
+                            wpm: wordsCorrect * 60000 / time,
+                            accuracy: totalCorrect / totalKeyPresses,
+                            time: time,
+                            
+                        }
+                    ))}}>Save Replay</Button>
+                }
             </Container>
             <TypeStats/>
         </Container>

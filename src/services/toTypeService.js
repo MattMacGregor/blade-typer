@@ -31,5 +31,4 @@ export const getOnThisDay = async (type, dd, mm) => {
 export const getFromSearch = async (query) => {
     const response = await axios.get(`${API_BASE}/search/${query}`);
     return response.data;
-
 }

@@ -5,6 +5,7 @@ import {Container} from "react-bootstrap";
 import toTypeReducer from "./reducers/toTypeReducer";
 import userReducer from "./reducers/user-reducer";
 import uiReducer from "./reducers/ui-reducer"
+import searchReducer from "./reducers/search-reducer"
 import AppIndex from "./AppIndex.js"
 
 const store = configureStore( {
@@ -12,6 +13,7 @@ const store = configureStore( {
         toType: toTypeReducer,
         users: userReducer,
         ui: uiReducer, 
+        search: searchReducer,
     }
 });
 

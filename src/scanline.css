@@ -13,7 +13,7 @@
   pointer-events: none;
 }
 
-.crt h1, h2, h3, h4, h5, h6, span, p, input, textarea, a {
+.crt h1, h2, h3, h4, h5, h6, span, p, input, textarea, a, div {
   animation: textShadow 1.6s infinite;
 }
 
@@ -97,6 +97,7 @@
     position: absolute;
     bottom: 100%;
     animation: scanline 3s linear infinite;
+    pointer-events: none;
 }
 
 @keyframes scanline {

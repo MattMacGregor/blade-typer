@@ -1,15 +1,21 @@
-import React from "react"
+import React, { useEffect } from "react"
 import {Container, ProgressBar} from "react-bootstrap"
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import {reset} from "../reducers/toTypeReducer";
 
 const TypeStats = () => {
     const {toType, currentGoalIndex, loading, totalKeyPresses, wordsCorrect, totalCorrect, totalIncorrect, time} = useSelector( state => state.toType );
      
-    let totalCharacters = 1;
+    let totalCharacters = 0;
     if(!loading && toType) {
-        totalCharacters = toType[currentGoalIndex].summary.length
+        for(let i = 0; i < toType.length; i++) {
+            totalCharacters += toType[i].summary.length
+        }
     }
+    
+    const dispatch = useDispatch();
+
     return (
         <Container className="mt-3 mb-3">
             <div className="row align-items-center">

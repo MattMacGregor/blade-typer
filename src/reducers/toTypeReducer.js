@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getRandomThunk, getOnThisDayThunk, getFromSearchThunk } from "../services/toTypeThunks"; 
 
 const initialState = {
+    gamemode: "",
     toType: undefined,
     currentGoalIndex: 0,
     loading: false,
@@ -11,9 +12,11 @@ const initialState = {
     totalIncorrect: 0,
     typed: "",
     time: 0,
-    startCountdown: 5,
+    startCountdown: 3,
     started: false,
-    finished: false
+    finished: false,
+    typingId: ""
+
 }
 
 const toTypeSlice = createSlice({
@@ -46,13 +49,30 @@ const toTypeSlice = createSlice({
             if(state.startCountdown == 0) {
                 state.started = true
             }
-        }
+        },
+        reset(state, {payload}) {
+            state.currentGoalIndex = initialState.currentGoalIndex;
+            state.totalKeyPresses = initialState.totalKeyPresses
+            state.wordsCorrect = initialState.wordsCorrect
+            state.totalCorrect = initialState.totalCorrect
+            state.totalIncorrect = initialState.totalIncorrect
+            state.typed = initialState.typed
+            state.time = initialState.time
+            state.startCountdown = initialState.startCountdown
+            state.started = initialState.started
+            state.finished = initialState.finished
+        },
+        finish(state, {payload}) {
+            state.finished = true;
+        },
     },
     extraReducers: {
         [getRandomThunk.pending]: 
             (state) => {
-                state.loading = true;
-                state.toType = "";
+                state.loading = true
+                state.finished = false
+                state.toType = ""
+                state.gamemode = 'RANDOM'
             },
         [getRandomThunk.fulfilled]:
             (state, { payload }) => {
@@ -60,6 +80,7 @@ const toTypeSlice = createSlice({
                 state.toType = payload.goals;
                 state.currentGoalIndex = 0;
                 state.loading = false;
+                state.typingId = payload.typingId
             },
         [getRandomThunk.rejected]:
             (state) => {
@@ -71,6 +92,7 @@ const toTypeSlice = createSlice({
             (state) => {
                 state.loading = true;
                 state.toType = "";
+                state.gamemode = 'DAY'
             },
         [getOnThisDayThunk.fulfilled]:
             (state, { payload }) => {
@@ -78,6 +100,7 @@ const toTypeSlice = createSlice({
                 state.toType = payload.goals;
                 state.currentGoalIndex = 0;
                 state.loading = false;
+                state.typingId = payload.typingId
             },
         [getOnThisDayThunk.rejected]:
             (state) => {
@@ -96,6 +119,7 @@ const toTypeSlice = createSlice({
                 state.toType = payload.goals;
                 state.currentGoalIndex = 0;
                 state.loading = false;
+                state.typingId = payload.typingId
             },
         [getFromSearchThunk.rejected]:
             (state) => {
@@ -106,5 +130,5 @@ const toTypeSlice = createSlice({
     },
 });
 
-export const {nextGoal ,updateTyped, updateStats, incrementTime, tickStartCountdownDown} = toTypeSlice.actions;
+export const {nextGoal ,updateTyped, updateStats, incrementTime, tickStartCountdownDown, reset, finish} = toTypeSlice.actions;
 export default toTypeSlice.reducer;

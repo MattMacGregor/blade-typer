@@ -1,28 +1,46 @@
+import {useEffect} from "react"
 import {useDispatch, useSelector} from "react-redux";
-import {logoutThunk} from "./users-thunk";
-import {useNavigate} from "react-router";
-import { Container } from "react-bootstrap"
+import {logoutThunk, findUserByNameThunk} from "./users-thunk";
+import {useNavigate, useParams} from "react-router";
+import { Container, Button } from "react-bootstrap"
+
+import ReplayList from "../replays/replay-list"
 const Profile = () => {
     const navigate = useNavigate()
-    const {currentUser} = useSelector((state) => state.users)
+    const {currentUser, publicProfile, loading} = useSelector((state) => state.users)
     const dispatch = useDispatch()
+    const params = useParams()
     const handleLogoutBtn = () => {
         dispatch(logoutThunk())
         navigate('/login')
     }
-
+    
+    useEffect(() => {
+        if(params.username && !(currentUser && params.username == currentUser.username) && !loading) {
+            dispatch(findUserByNameThunk(params.username))
+        } else if(params.username == currentUser.username) {
+            params.username = undefined
+        }
+    }, [])
+            
     return(
         <Container className="position-absolute top-50 start-50 translate-middle">
-            <h1>Profile</h1>
             {
-                currentUser &&
-                <h2>Welcome new user: {currentUser.username}</h2>
+                !params.username &&
+                <h1>{currentUser.username}</h1>
             }
-            <button
-                className="btn btn-danger"
-                onClick={handleLogoutBtn}>
-                Logout
-            </button>
+            {
+                params.username &&
+                <h1>{params.username}</h1>
+            }
+            <div className="mt-5">
+                { params.username && 
+                    <ReplayList populate username={params.username} />
+                }
+                { !params.username &&
+                  <ReplayList populate username={currentUser.username}/>
+                }
+            </div>
         </Container>
     )
 }

@@ -1,5 +1,6 @@
 import { findAllUsers } from "./user-service.js"
 import react from "react"
+import {Link} from "react-router-dom"
 import { useState, useEffect } from "react"
 import { useSelector } from "react-redux"
 import { Container  } from "react-bootstrap"
@@ -14,7 +15,7 @@ const Users = () => {
                 users.map(u => 
                     <div className="row"> 
                         <div className="col">
-                            { u.username }
+                            <Link className="undecorated" to={"/users/" + u.username}>{ u.username }</Link>
                         </div>
                     </div>
                 )

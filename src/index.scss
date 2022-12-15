@@ -80,3 +80,40 @@ code {
     top: 4vh;
     width: 100%;
 }
+
+.cyber-card {
+    transition: all 0.2s ease;
+}
+
+.cyber-card .card-body {
+    background-color: darken($dark, 1%);
+}
+
+.cyber-card .card-header {
+    background-color: darken($dark, 3%);
+    @include font-size(1em);
+}
+
+.cyber-card:hover {
+    transform: scale(1.05);
+}
+
+.cyber-card:hover .card-header {
+    background-color: $secondary;
+    @include font-size(1.2em);
+}
+
+.searchmatch {
+    color: $primary;
+    font-weight: bold;
+}
+
+#replayHeader h4 {
+    border-style: solid;
+    border-color: $secondary;
+    border-width: 0px 1px;
+}
+
+.undecorated {
+    text-decoration: none;
+}

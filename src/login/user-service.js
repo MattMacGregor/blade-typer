@@ -2,11 +2,12 @@ import axios from "axios";
 
 const API_BASE = process.env.REACT_APP_API_BASE
 const USER_API = `${API_BASE}/users`
+const REPLAY_API = `${API_BASE}/replays`
 
 const api = axios.create({withCredentials: true});
 
-export const findUserById = async (uid) => {
-    const response = await api.get(`${USER_API}/${uid}`)
+export const findUserByName = async (name) => {
+    const response = await api.get(`${USER_API}/${name}`)
     const user = response.data
     return user
 }
@@ -37,8 +38,19 @@ export const findAllUsers = async () => {
     return response.data
 }
 
-export const createUser = () => {
-    
+export const getReplays = async(username) => {
+    const response = await api.get(`${REPLAY_API}/${username}`)
+    return response.data
+}
+
+export const saveReplay = async(replay) => {
+    const response = await api.post(`${REPLAY_API}/save`, replay)
+    return response.data
+}
+
+export const deleteReplay = async(replayId) => {
+    const response = await api.delete(`${REPLAY_API}/single/${replayId}`)
+    return response.data
 }
 
 const deleteUser = () => {}

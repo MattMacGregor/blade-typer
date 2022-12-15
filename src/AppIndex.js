@@ -4,6 +4,9 @@ import Home from "./home";
 import Typer from "./typer";
 import Login from "./login/login.js"
 import Users from "./login/users.js"
+import Replays from "./replays"
+import Search from "./search"
+import SearchDetails from "./search/search-details"
 import { LogoutButton } from "./login/logout.js"
 import handleLogoutButton from "./login/logout.js"
 import LoggedInRoute from "./helpers/loggedin-route.js"
@@ -32,20 +35,24 @@ const AppIndex = () => {
                 <Routes>
                     <Route index path="/*" element={<Home/>} />
                     <Route path="/users" element={<Users/>} />
+                    <Route path="/users/:username" element={<Profile/>} />
                     <Route path="/typer" element={<Typer/>} />
                     <Route path="/login" element={<Login/>} />
+                    <Route path="/search" element={<Search/>} />
+                    <Route path="/search/:title" element={<SearchDetails/>} />
                     <Route path="/profile" element={
                         <LoggedInRoute>
                             <Profile/>
                         </LoggedInRoute>
                     } />
+                    <Route path="/replays" element={<Replays populate/>} />
                     <Route path="/register" element={<Register/>} />
                 </Routes>
                 <Navbar id="homeBar" className="crt flex-row-reverse ps-3 pe-3" fixed="bottom" variant="dark" expand="sm">
                     <Navbar.Collapse id="button-menu">
                         {   
                             currentUser &&
-                            <Button as={Link} to="/profile" className="homeBarLink ms-4 me-4 col">Profile</Button>
+                            <Button as={Link} to="/profile" className="homeBarLink ms-4 me-4 col">Profile: <span className="text-warning">{currentUser.username}</span></Button>
                         }
                         {
                             !currentUser && 
