@@ -53,6 +53,11 @@ export const deleteReplay = async(replayId) => {
     return response.data
 }
 
+export const updateUser = async (updates) => {
+    console.log(updates.username, updates.updates)
+    const response = await api.put(`${USER_API}/${updates.username}`, { username: updates.username, update: updates.updates })
+    return response.data
+}
+
 const deleteUser = () => {}
-const updateUser = () => {}
 

@@ -52,7 +52,7 @@ const toTypeSlice = createSlice({
         },
         reset(state, {payload}) {
             state.currentGoalIndex = initialState.currentGoalIndex;
-            state.totalKeyPresses = initialState.totalKeyPresses
+            state.totalKeyPresSses = initialState.totalKeyPresses
             state.wordsCorrect = initialState.wordsCorrect
             state.totalCorrect = initialState.totalCorrect
             state.totalIncorrect = initialState.totalIncorrect
@@ -65,6 +65,14 @@ const toTypeSlice = createSlice({
         finish(state, {payload}) {
             state.finished = true;
         },
+        setGoal(state, {payload}) {
+            state.currentGoalIndex = 0
+            console.log(payload)
+            state.toType = [payload.toType]
+            state.loading = false
+            state.typingId = payload.typingId
+            state.gamemode = 'SEARCH'
+        }
     },
     extraReducers: {
         [getRandomThunk.pending]: 
@@ -130,5 +138,5 @@ const toTypeSlice = createSlice({
     },
 });
 
-export const {nextGoal ,updateTyped, updateStats, incrementTime, tickStartCountdownDown, reset, finish} = toTypeSlice.actions;
+export const {nextGoal ,updateTyped, updateStats, incrementTime, tickStartCountdownDown, reset, finish, setGoal} = toTypeSlice.actions;
 export default toTypeSlice.reducer;

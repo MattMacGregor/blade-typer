@@ -5,6 +5,8 @@ import {useNavigate, Link, useParams} from "react-router-dom"
 import {getPageThunk, searchWikiThunk} from "./search-thunk"
 import ReplayList from "../replays/replay-list"
 import parse from "html-react-parser"
+import {setGoal} from "../reducers/toTypeReducer.js"
+
 const WIKIMEDIA_API = "https://api.wikimedia.org"
 const SEARCH_API = `${WIKIMEDIA_API}/core/v1/wikipedia/en/search/page?q=`
 
@@ -32,7 +34,7 @@ const SearchDetails = () => {
             {
                 !detailsLoading &&
                 <Container> 
-                    <div className="m-auto mt-3 mb-4 w-100 text-center"><Link className="h2 undecorated">{details.title} </Link></div>
+                    <div className="m-auto mt-3 mb-4 w-100 text-center"><Link className="h2 undecorated" onClick={() => dispatch(setGoal({toType: {title: details.title, summary: details.summary}, typingId: details.title})) } to="/typer">{details.title}</Link></div>
                     <ReplayList replays={details.replays} />
                 </Container>
             }

@@ -36,7 +36,11 @@ const usersReducer = createSlice({
                 state.loading = false
             },
         [saveReplayThunk.fulfilled]: (state, {payload}) => {
-                state.replays[payload.username].push(payload)
+                if(state.replays[payload.username]) {
+                    state.replays[payload.username].push(payload)
+                } else {
+                    state.replays[payload.username] = [payload]
+                }
             },
         [deleteReplayThunk.fulfilled]: (state, {payload}) => {
             state.replays[state.currentUser.username] = state.replays[state.currentUser.username].filter((replay) => replay._id != payload)

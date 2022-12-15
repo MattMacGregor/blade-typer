@@ -49,7 +49,7 @@ const ReplayList = (props) => {
                             replayLists.map((replay) =>
                                 <Card className="cyber-card rounded-4 mb-2">
                                     <Card.Header className="rounded-4 rounded-bottom">
-                                        <h4 className="mt-1"><Link className="undecorated" to={"/users/" + username}>{ username }</Link><span className="ms-2">{replay.typingId}</span>{currentUser && currentUser.username == username && <Button className="float-end rounded-pill" variant="danger" onClick={() => { deleteReplay(replay._id)}}>Delete</Button>}</h4>
+                                        <h4 className="mt-1"><Link className="undecorated" to={"/users/" + username}>{ username }</Link><span className="ms-2">{replay.typingId}</span>{currentUser && (currentUser.username == replay.username || currentUser.type == "MOD") && <Button className="float-end rounded-pill" variant="danger" onClick={() => { deleteReplay(replay._id)}}>Delete</Button>}</h4>
                                     </Card.Header>
                                     <Card.Body className="rounded-4 rounded-top">
                                         <div className="row">
@@ -75,7 +75,7 @@ const ReplayList = (props) => {
                         !props.populate && props.replays.map((replay) =>
                             <Card className="cyber-card rounded-4 mb-2">
                                 <Card.Header className="rounded-4 rounded-bottom">
-                                    <h4 className="mt-1"><Link className="undecorated" to={"/users/" + replay.username}>{ replay.username }</Link><span className="ms-2">{replay.typingId}</span>{currentUser && currentUser.username == replay.username && <Button className="float-end rounded-pill" variant="danger" onClick={() => { deleteReplay(replay._id)}}>Delete</Button>}</h4>
+                                    <h4 className="mt-1"><Link className="undecorated" to={"/users/" + replay.username}>{ replay.username }</Link><span className="ms-2">{replay.typingId}</span>{currentUser && (currentUser.username == replay.username || currentUser.type == "MOD") && <Button className="float-end rounded-pill" variant="danger" onClick={() => { deleteReplay(replay._id)}}>Delete</Button>}</h4>
                                 </Card.Header>
                                 <Card.Body className="rounded-4 rounded-top">
                                     <div className="row">
