@@ -9,13 +9,14 @@ const Users = () => {
     const { currentUser, loading, users } = useSelector((state) => state.users)
 
     return(
-        <Container className="position-absolute top-50 start-50">
+        <Container className="mt-5 text-center">
+            <h2 className="mb-4 text-warning">Users:</h2>
             {
                 !loading &&
                 users.map(u => 
                     <div className="row"> 
                         <div className="col">
-                            <Link className="undecorated" to={"/users/" + u.username}>{ u.username }</Link>
+                            <Link className="undecorated h3" to={"/users/" + u.username}>{ u.username }</Link>
                         </div>
                     </div>
                 )

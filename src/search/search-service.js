@@ -20,7 +20,7 @@ export const getPage = async (typingId) => {
     console.log(responseWiki)
     const ret = {
         replays: response.data,
-        title: responseWiki.data.title,
+        title: responseWiki.data.titles["canonical"],
         summary: responseWiki.data.extract,
         description: responseWiki.data.description,
     }

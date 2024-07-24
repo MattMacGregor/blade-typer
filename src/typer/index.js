@@ -24,6 +24,8 @@ const Typer = () => {
         if(!loading && toType) {
             let correct = 0, incorrect = 0, total = totalKeyPresses + 1, correctWords = 0;
             let wordCorrect = true;
+            let currentStreak = "";
+            let correctStreak = true;
             setProgress([...(toType[currentGoalIndex].summary)].map((c, i) => { 
                     if(i >= typed.length) {
                         return c
@@ -36,11 +38,39 @@ const Typer = () => {
                                 wordCorrect = true
                             }
                         }
+                        if(!correctStreak) {
+                            let colors = (<u className="text-danger">{ currentStreak }</u>)
+                            if(currentStreak == "")
+                                colors = undefined
+                            correctStreak = true
+                            currentStreak = c
+                            if(i == typed.length - 1)
+                                return [ colors, (<u className="text-success">{ currentStreak }</u>)]
+                            return colors
+                        } else {
+                            currentStreak += c
+                            if(i == typed.length - 1)
+                                return(<u className="text-success">{ currentStreak }</u>)
+                        }
                     } else {
                         incorrect += 1;
                         wordCorrect = false;
+                        if(correctStreak) {
+                            let colors = (<u className="text-success">{ currentStreak }</u>)
+                            if(currentStreak == "")
+                                colors = undefined
+                            currentStreak = c
+                            if(i == typed.length - 1)
+                                return [colors, (<u className="text-danger">{ currentStreak }</u>)]
+                            correctStreak = false
+                            return colors
+                        } else {
+                            currentStreak += c
+                            if(i == typed.length - 1)
+                                return(<u className="text-danger">{ currentStreak }</u>)
+                        }
                     }
-                    return(<span className={ c == typed[i] ? "text-success" : "text-danger" } ><u>{ c }</u></span>)
+                    return
                 }
             ))
             if(correct == toType[currentGoalIndex].summary.length) {
@@ -103,7 +133,7 @@ const Typer = () => {
     }, [loading]);
 
     useEffect(() => {
-        if(started) {
+        if(started && typingArea.current) {
             typingArea.current.focus()
             clearInterval(interval.current)
             interval.current = setInterval(() => {

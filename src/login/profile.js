@@ -37,7 +37,7 @@ const Profile = () => {
                 !params.username &&
                 currentUser && 
                 <Container className="row">
-                    <h1 className="col-10">{ edit ? "Editing " : ""} {currentUser.username}</h1>
+                    <h1 className="col-10">{ edit ? "Editing " : "User: "} {currentUser.username}</h1>
                     <Button className="col-2" onClick={() => setEdit(!edit)}>
                         { edit ? "Done" : "Edit" }
                     </Button>
@@ -45,7 +45,7 @@ const Profile = () => {
             }
             {
                 params.username &&
-                <h1>{params.username}</h1>
+                <h1><span className="text-warning">User:</span> {params.username}</h1>
             }
             {
                 edit &&

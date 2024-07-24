@@ -35,6 +35,9 @@ const SearchDetails = () => {
                 !detailsLoading &&
                 <Container> 
                     <div className="m-auto mt-3 mb-4 w-100 text-center"><Link className="h2 undecorated" onClick={() => dispatch(setGoal({toType: {title: details.title, summary: details.summary}, typingId: details.title})) } to="/typer">{details.title}</Link></div>
+                    <Container className="h4">
+                        {details.summary}
+                    </Container>
                     <ReplayList replays={details.replays} />
                 </Container>
             }
