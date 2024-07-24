@@ -27,8 +27,11 @@ const Typer = () => {
             let currentStreak = "";
             let correctStreak = true;
             setProgress([...(toType[currentGoalIndex].summary)].map((c, i) => { 
-                    if(i >= typed.length) {
-                        return c
+                    if(i >= toType[currentGoalIndex].summary.length - 1 && i >= typed.length) {
+                        currentStreak += c
+                        return currentStreak
+                    } else if(i >= typed.length) {
+                        currentStreak += c
                     } else if(c == typed[i]) {
                         correct += 1;
                         if(c == ' ') {
@@ -44,13 +47,19 @@ const Typer = () => {
                                 colors = undefined
                             correctStreak = true
                             currentStreak = c
-                            if(i == typed.length - 1)
-                                return [ colors, (<u className="text-success">{ currentStreak }</u>)]
+                            if(i == typed.length - 1 || i == toType[currentGoalIndex].summary.length - 1) {
+                                colors = [colors, (<u className="text-success">{ currentStreak }</u>)]
+                                currentStreak = ""
+                                return colors
+                            }
                             return colors
                         } else {
                             currentStreak += c
-                            if(i == typed.length - 1)
-                                return(<u className="text-success">{ currentStreak }</u>)
+                            if(i == typed.length - 1 || i == toType[currentGoalIndex].summary.length - 1) {
+                                let colors = (<u className="text-success">{ currentStreak }</u>)
+                                currentStreak = ""
+                                return colors
+                            }
                         }
                     } else {
                         incorrect += 1;
@@ -60,14 +69,20 @@ const Typer = () => {
                             if(currentStreak == "")
                                 colors = undefined
                             currentStreak = c
-                            if(i == typed.length - 1)
-                                return [colors, (<u className="text-danger">{ currentStreak }</u>)]
+                            if(i == typed.length - 1 || i == toType[currentGoalIndex].summary.length - 1) {
+                                colors = [colors, (<u className="text-danger">{ currentStreak }</u>)]
+                                currentStreak = ""
+                                return colors
+                            }
                             correctStreak = false
                             return colors
                         } else {
                             currentStreak += c
-                            if(i == typed.length - 1)
-                                return(<u className="text-danger">{ currentStreak }</u>)
+                            if(i == typed.length - 1 || i == toType[currentGoalIndex].summary.length - 1) {
+                                let colors = (<u className="text-danger">{ currentStreak }</u>)
+                                currentStreak = ""
+                                return colors
+                            }
                         }
                     }
                     return
